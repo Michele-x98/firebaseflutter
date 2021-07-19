@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebaseflutter/provider/sign_provider.dart';
 import 'package:firebaseflutter/view/home_page.dart';
-import 'package:firebaseflutter/view/sign_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  late final Function animate;
+  LoginPage(Function animateTo, {Key? key}) {
+    this.animate = animateTo;
+  }
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -55,8 +55,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  context.read<SignProvider>().controller.animateToPage(1,
-                      duration: Duration(seconds: 1), curve: Curves.ease);
+                  widget.animate(1);
                 },
                 child: Text('Create an account'),
               ),

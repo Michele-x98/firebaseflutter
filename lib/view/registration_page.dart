@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebaseflutter/provider/sign_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class RegistrationPage extends StatefulWidget {
-  RegistrationPage({Key? key}) : super(key: key);
+  late final Function animateTo;
+  RegistrationPage(Function function, {Key? key}) {
+    this.animateTo = function;
+  }
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -71,8 +72,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               TextButton(
                 onPressed: () {
-                  context.read<SignProvider>().controller.animateToPage(0,
-                      duration: Duration(seconds: 1), curve: Curves.ease);
+                  widget.animateTo(0);
                 },
                 child: Text('Login'),
               ),
@@ -102,9 +102,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
     print("Created user with email: ${_user?.email}");
     Future.delayed(
-        Duration(seconds: 3),
-        () => context.read<SignProvider>().controller.animateToPage(0,
-            duration: Duration(seconds: 1), curve: Curves.ease));
+      Duration(seconds: 3),
+      () => widget.animateTo(0),
+    );
   }
 
   String? validetePassword(String? password) {

@@ -23,9 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # Firebase
   firebase_core: "^1.4.0"
   firebase_auth: "^3.0.1"
-  provider:
+  firebase_messaging: ^10.0.4
+  flutter_local_notifications: ^6.0.0
+
+  provider: ^5.0.0
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
