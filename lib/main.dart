@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebaseflutter/services/local_notification_service.dart';
-import 'package:firebaseflutter/view/sign_page.dart';
+import 'package:firebaseflutter/view/notification_settings_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -45,6 +45,8 @@ class _AppState extends State<App> {
       iosRequestPermissionAndForegroundNotification(messaging);
     }
 
+    subscribeToTopic(messaging);
+
     // Listen on user TAP on notification when app is TERMINATED
     messaging.getInitialMessage().then((message) {
       // DO SOMETHINGS
@@ -74,25 +76,15 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: SignPage(
-
-            // child: FutureBuilder(
-            //   future: _initialization,
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasError) {
-            //       return Container(
-            //         child: Text('ERROR'),
-            //       );
-            //     }
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       return SignPage();
-            //     }
-            //     return CircularProgressIndicator();
-            //   },
-            // ),
-            ),
+        body: NotificationSettingsPage(),
       ),
     );
+  }
+
+  void subscribeToTopic(FirebaseMessaging messaging) async {
+    String topic = 'noti';
+    await messaging.subscribeToTopic(topic);
+    print('subscribe to topic: $topic');
   }
 
   Future iosRequestPermissionAndForegroundNotification(
