@@ -13,7 +13,7 @@ class BadgeCounterHandler {
   void analyzeAppleNotification(AppleNotification appleNotification) {
     String? badge = appleNotification.badge;
     if (badge != null) {
-      FlutterAppBadger.updateBadgeCount(int.parse(badge));
+      _localstorage.write('badge_counter', badge);
     } else {
       incrementAppBadgeCounter();
     }
