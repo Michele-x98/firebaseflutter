@@ -6,14 +6,20 @@ import 'package:firebaseflutter/view/notification_settings_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 // Recive message when app is in background or terminated
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   print(message.data.toString());
   print(message.notification!.title);
+
   if (Platform.isAndroid) {
     print('Background notification recived on Andorid');
+    await FlutterAppBadger.isAppBadgeSupported().then(
+      (value) => value ? FlutterAppBadger.updateBadgeCount(1) : null,
+    );
   } else {
+    FlutterAppBadger.updateBadgeCount(1);
     print('Background notification recived on iOS');
   }
 }
