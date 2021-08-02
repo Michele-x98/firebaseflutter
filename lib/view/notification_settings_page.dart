@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:firebaseflutter/view/sign_page.dart';
 import 'package:flutter/material.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
@@ -65,14 +66,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage>
                           );
                         }
                       },
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).push(
+                        new MaterialPageRoute(
+                          builder: (context) => SignPage(),
+                        ),
+                      ),
+                      child: Text('go to sign page'),
                     )
-                    // : TextButton(
-                    //     onPressed: () => NotificationPermissions
-                    //         .requestNotificationPermissions(
-                    //       openSettings: true,
-                    //     ),
-                    //     child: Text('Enable notification'),
-                    //   )
                   ],
                 ),
               ),
