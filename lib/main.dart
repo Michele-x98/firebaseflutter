@@ -2,13 +2,18 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebaseflutter/services/badge_handler_service.dart';
+import 'package:firebaseflutter/services/my_provider.dart';
 import 'package:firebaseflutter/services/local_notification_service.dart';
 import 'package:firebaseflutter/services/push_notifcation_service.dart';
-import 'package:firebaseflutter/view/notification_settings_page.dart';
+import 'package:firebaseflutter/view/home_page.dart';
+import 'package:firebaseflutter/view/sign_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 
 // Recive message when app is in background or terminated
@@ -50,24 +55,27 @@ class _AppState extends State<App> {
     FlutterAppBadger.removeBadge();
 
     LocalNotificationService.initialize();
+    Get.put(Controller());
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        BlocProvider(
+          create: (context) => AsyncCubit(),
+        ),
         Provider<PushNotificationService>(
           create: (context) => PushNotificationService(),
-          lazy: false,
+          // lazy: false,
         ),
-        // Provider<BadgeCounterHandler>(
-        //   create: (context) => BadgeCounterHandler(),
-        //   lazy: false,
-        // ),
+        ChangeNotifierProvider(
+          create: (context) => MyProvider(),
+        )
       ],
-      child: MaterialApp(
-        home: Scaffold(
-          body: NotificationSettingsPage(),
+      child: GetMaterialApp(
+        home: MaterialApp(
+          home: SignPage(),
         ),
       ),
     );

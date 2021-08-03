@@ -1,5 +1,7 @@
+import 'package:firebaseflutter/view/home_page.dart';
 import 'package:firebaseflutter/view/registration_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 import 'login_page.dart';
 
@@ -37,8 +39,12 @@ class SignPageState extends State<SignPage> {
               size: 100,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width,
+              height: 400,
               child: pages,
+            ),
+            TextButton(
+              onPressed: () => Get.offAll(Home()),
+              child: Text('skip'),
             )
           ],
         ),
