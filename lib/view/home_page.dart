@@ -34,6 +34,7 @@ class AsyncCubit extends Cubit<MyState> {
     await Future.delayed(
       Duration(seconds: 2),
     );
+    Get.to(SecondPage());
     emit(EndState());
   }
 }
@@ -74,14 +75,7 @@ class SimpleButton extends StatelessWidget {
         );
       },
       listener: (context, state) {
-        state is EndState
-            ? Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => SecondPage(),
-                ),
-              )
-            : null;
+        //Do somethings that require current context
       },
     );
   }
