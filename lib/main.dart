@@ -81,3 +81,12 @@ class _AppState extends State<App> {
     );
   }
 }
+
+//Another way to inject multi controller
+class InjectGetController {
+  InjectGetController(List<GetxController> controller) {
+    controller.forEach((element) {
+      Get.put(controller);
+    });
+  }
+}

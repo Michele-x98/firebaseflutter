@@ -43,7 +43,7 @@ class SignPageState extends State<SignPage> {
               child: pages,
             ),
             TextButton(
-              onPressed: () => Get.offAll(Home()),
+              onPressed: () => Get.offAll(HomeStream()),
               child: Text('skip'),
             )
           ],
