@@ -115,8 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(lx.onLogin.value ? 'LOGIN' : 'REGISTRATI'),
                   ),
                   TextButton(
-                      onPressed: () => lx.onLogin.value = !lx.onLogin.value,
-                      child: Text(lx.onLogin.value ? 'REGISTRATI' : 'LOGIN'))
+                    onPressed: () => lx.onLogin.value = !lx.onLogin.value,
+                    child: Text(lx.onLogin.value ? 'REGISTRATI' : 'LOGIN'),
+                  )
                 ],
               ),
             ),

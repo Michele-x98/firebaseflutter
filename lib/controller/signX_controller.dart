@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebaseflutter/view/home_page.dart';
 import 'package:firebaseflutter/view/notification_settings_page.dart';
+import 'package:firebaseflutter/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,18 +23,20 @@ class SignXController extends GetxController {
         email: emailController.text,
         password: passwordController.text,
       );
-      Navigator.pushAndRemoveUntil(
-          Get.context!,
-          new MaterialPageRoute(
-            builder: (context) => NotificationSettingsPage(),
-          ),
-          (route) => false);
+      Get.offUntil(
+        new MaterialPageRoute(
+          builder: (context) => NotificationSettingsPage(),
+        ),
+        (route) => false,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        errorSnackbar('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        errorSnackbar('Wrong password provided for that user.');
       }
+      return;
     }
   }
 
@@ -51,29 +55,32 @@ class SignXController extends GetxController {
       );
       _user = res.user;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      errorSnackbar(e.toString());
+      return;
     }
-    // print("Created user with email: ${_user?.email}");
+    completeSnackbar('Created user with email: ${_user?.email}');
     Future.delayed(
       Duration(seconds: 3),
-      () => animateToPage(0),
+      () => Get.offUntil(
+          new MaterialPageRoute(
+            builder: (context) => NotificationSettingsPage(),
+          ),
+          (route) => false),
     );
   }
 
   String? validatePassword(String? password) {
-    if (password != null) {
-      if (password.isEmpty && password.length < 4 || password.length > 12) {
-        return 'Error, password incorrect';
-      }
+    if (password!.isEmpty) {
       return 'Error, empty password';
+    }
+
+    if (password.length < 4 || password.length > 12) {
+      return 'Error, password incorrect';
     }
     return null;
   }
 
   void animateToPage(int index) {
-    passwordController.clear();
-    confirmPasswordController.clear();
-
     controller.animateToPage(index,
         duration: Duration(seconds: 1), curve: Curves.ease);
   }

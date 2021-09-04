@@ -70,11 +70,9 @@ class _AppState extends State<App> {
         ),
       ],
       child: GetMaterialApp(
-        home: MaterialApp(
-          theme: ThemeData.dark(),
-          themeMode: ThemeMode.dark,
-          home: SignPage(),
-        ),
+        theme: ThemeData.dark(),
+        debugShowCheckedModeBanner: false,
+        home: SignPage(),
       ),
     );
   }

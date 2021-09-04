@@ -1,6 +1,8 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:firebaseflutter/view/sign/sign_page.dart';
+import 'package:firebaseflutter/controller/notificationX_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
@@ -13,77 +15,76 @@ class NotificationSettingsPage extends StatefulWidget {
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage>
     with WidgetsBindingObserver {
-  bool _permissionStatus = false;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    _fetchPermission();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      print('app resumed');
-      setState(() {});
+      Get.find<NotificationXController>().updatePermissionStatus();
     }
   }
 
-  Future<PermissionStatus> _fetchPermission() =>
-      NotificationPermissions.getNotificationPermissionStatus();
-
   @override
   Widget build(BuildContext context) {
+    NotificationXController nx = Get.put(NotificationXController());
     return Scaffold(
-      body: FutureBuilder<PermissionStatus>(
-        future: _fetchPermission(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == PermissionStatus.granted) {
-              _permissionStatus = true;
-            } else {
-              _permissionStatus = false;
-            }
-            return Container(
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      snapshot.data.toString(),
-                    ),
-                    Switch(
-                      value: _permissionStatus,
-                      onChanged: (bool value) {
-                        if (_permissionStatus) {
-                          AppSettings.openAppSettings();
-                        } else {
-                          NotificationPermissions
-                              .requestNotificationPermissions(
-                            openSettings: true,
-                          );
-                        }
-                      },
-                    ),
-                    ElevatedButton(
-                      onPressed: () => Navigator.of(context).push(
-                        new MaterialPageRoute(
-                          builder: (context) => SignPage(),
+      appBar: AppBar(
+        title: Text('Notification Settings Page'),
+      ),
+      body: Obx(
+        () => ListView(
+          children: [
+            FutureBuilder<PermissionStatus>(
+              future: nx.fetchPermission(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data == PermissionStatus.granted) {
+                    nx.permissionStatus.value = true;
+                  } else {
+                    nx.permissionStatus.value = false;
+                  }
+                  return Container(
+                    child: Center(
+                      child: Obx(
+                        () => ListTile(
+                          title: Text('Notification Permission'),
+                          trailing: CupertinoSwitch(
+                            value: nx.permissionStatus.value,
+                            onChanged: (bool value) {
+                              if (nx.permissionStatus.value) {
+                                AppSettings.openAppSettings();
+                              } else {
+                                NotificationPermissions
+                                    .requestNotificationPermissions(
+                                  openSettings: true,
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ),
-                      child: Text('go to sign page'),
-                    )
-                  ],
-                ),
+                    ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Send notification'),
+              trailing: ElevatedButton(
+                onPressed: !nx.permissionStatus.value ? null : () => {},
+                child: Text('SEND'),
               ),
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            )
+          ],
+        ),
       ),
     );
   }

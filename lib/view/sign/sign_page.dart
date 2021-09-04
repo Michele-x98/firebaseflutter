@@ -1,5 +1,6 @@
 import 'package:firebaseflutter/controller/signX_controller.dart';
 import 'package:firebaseflutter/view/home_page.dart';
+import 'package:firebaseflutter/view/notification_settings_page.dart';
 import 'package:firebaseflutter/view/sign/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class SignPageState extends State<SignPage> {
               child: pages,
             ),
             TextButton(
-              onPressed: () => Get.offAll(HomeStream()),
+              onPressed: () => Get.offAll(NotificationSettingsPage()),
               child: Text('skip'),
             )
           ],
