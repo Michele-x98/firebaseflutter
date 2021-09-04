@@ -1,32 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebaseflutter/controller/signX_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegistrationPage extends StatefulWidget {
-  late final Function animateTo;
-  RegistrationPage(Function function, {Key? key}) {
-    this.animateTo = function;
-  }
+  RegistrationPage();
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  TextEditingController _emailController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
-  TextEditingController _confirmPasswordController =
-      new TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
+    SignXController rx = Get.find();
     return Container(
       padding: EdgeInsets.all(30),
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Form(
-          key: _formKey,
+          key: rx.regFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -34,7 +27,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Container(
                 width: 300,
                 child: TextFormField(
-                  controller: _emailController,
+                  controller: rx.emailController,
                   validator: (v) {},
                   decoration: InputDecoration(labelText: 'Email'),
                 ),
@@ -45,9 +38,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _passwordController,
+                        controller: rx.passwordController,
                         obscureText: true,
-                        validator: (v) => validetePassword(v),
+                        validator: (v) => rx.validatePassword(v),
                         decoration: InputDecoration(labelText: 'Password'),
                       ),
                     ),
@@ -60,9 +53,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _confirmPasswordController,
+                        controller: rx.confirmPasswordController,
                         obscureText: true,
-                        validator: (v) => validetePassword(v),
+                        validator: (v) => rx.validatePassword(v),
                         decoration:
                             InputDecoration(labelText: 'Confirm Password'),
                       ),
@@ -72,45 +65,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               TextButton(
                 onPressed: () {
-                  widget.animateTo(0);
+                  rx.animateToPage(0);
                 },
                 child: Text('Login'),
               ),
-              ElevatedButton(onPressed: () => signIn(), child: Text('SignIn')),
+              ElevatedButton(
+                onPressed: () => rx.signIn(),
+                child: Text('SignIn'),
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  signIn() async {
-    User? _user;
-    if (!_formKey.currentState!.validate()) return;
-    if (_confirmPasswordController.text
-            .toLowerCase()
-            .compareTo(_passwordController.text.toLowerCase()) !=
-        0) return;
-    try {
-      UserCredential res = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
-      _user = res.user;
-      print('ciao');
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-    }
-    print("Created user with email: ${_user?.email}");
-    Future.delayed(
-      Duration(seconds: 3),
-      () => widget.animateTo(0),
-    );
-  }
-
-  String? validetePassword(String? password) {
-    if (password!.isEmpty && password.length < 6 || password.length > 12) {
-      return 'Error, password incorrect';
-    }
-    return null;
   }
 }

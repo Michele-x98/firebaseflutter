@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebaseflutter/services/badge_handler_service.dart';
-import 'package:firebaseflutter/services/my_provider.dart';
 import 'package:firebaseflutter/services/local_notification_service.dart';
 import 'package:firebaseflutter/services/push_notifcation_service.dart';
 import 'package:firebaseflutter/view/home_page.dart';
-import 'package:firebaseflutter/view/sign_page.dart';
+import 'package:firebaseflutter/view/sign/sign_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -69,12 +68,11 @@ class _AppState extends State<App> {
           create: (context) => PushNotificationService(),
           // lazy: false,
         ),
-        ChangeNotifierProvider(
-          create: (context) => MyProvider(),
-        )
       ],
       child: GetMaterialApp(
         home: MaterialApp(
+          theme: ThemeData.dark(),
+          themeMode: ThemeMode.dark,
           home: SignPage(),
         ),
       ),

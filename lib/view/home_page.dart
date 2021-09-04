@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,10 +61,10 @@ class _HomeStreamState extends State<HomeStream> {
   }
 
   changeDate() {
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('shopInfo');
+    DocumentReference collectionReference = FirebaseFirestore.instance
+        .collection('shopInfo')
+        .doc('sF3VJyfbTY8nWUBXWt14');
     collectionReference
-        .doc('sF3VJyfbTY8nWUBXWt14')
         .update({'isShopOpen': isShopOpen == 'true' ? false : true});
   }
 

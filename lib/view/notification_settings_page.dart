@@ -1,5 +1,5 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:firebaseflutter/view/sign_page.dart';
+import 'package:firebaseflutter/view/sign/sign_page.dart';
 import 'package:flutter/material.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 

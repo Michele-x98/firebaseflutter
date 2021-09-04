@@ -1,45 +1,41 @@
+import 'package:firebaseflutter/controller/signX_controller.dart';
 import 'package:firebaseflutter/view/home_page.dart';
-import 'package:firebaseflutter/view/registration_page.dart';
+import 'package:firebaseflutter/view/sign/registration_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import 'login_page.dart';
 
 class SignPage extends StatefulWidget {
-  SignPage({Key? key}) : super(key: key);
+  SignPage() {
+    Get.put(SignXController());
+  }
 
   @override
   SignPageState createState() => SignPageState();
 }
 
 class SignPageState extends State<SignPage> {
-  final PageController controller = new PageController();
-
-  void animateToPage(int index) {
-    controller.animateToPage(index,
-        duration: Duration(seconds: 1), curve: Curves.ease);
-  }
-
   @override
   Widget build(BuildContext context) {
     final pages = new PageView(
-      controller: controller,
+      controller: Get.find<SignXController>().controller,
       physics: new NeverScrollableScrollPhysics(),
       children: [
-        LoginPage(animateToPage),
-        RegistrationPage(animateToPage),
+        LoginPage(),
+        RegistrationPage(),
       ],
     );
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FlutterLogo(
               size: 100,
             ),
             SizedBox(
-              height: 400,
+              height: 511,
               child: pages,
             ),
             TextButton(
